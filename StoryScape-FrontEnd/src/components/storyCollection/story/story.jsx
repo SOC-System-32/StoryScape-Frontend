@@ -1,34 +1,62 @@
-import { GrMapLocation } from "react-icons/gr";
-import dummyData from "../../../../db.json";
+
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import supabase from "../../../config/supabaseClient"
 
 export default function Story() {
   const location = useLocation();
   const story_id = location.state; // grabs the state passed
-  const stories = dummyData.stories;
   const [story, setStory] = useState(null); // Declare and initialise the story state
 
+
+  console.log(story_id)
+
   useEffect(() => {
-    const filteredStory = stories.find((s) => s["story_id"] === story_id);
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("stories")
+        .select()
+        .eq("story_id", story_id);
 
-    setStory(filteredStory); // Update the story state with the filtered story
-  }, [stories, story_id]);
+      if (data !== null) {
+        setStory(data);
+      }
 
-  const renderAudioPlayer = () => {
-    const audioFile = story.files.find((file) => file.type === "audio");
-    if (audioFile) {
-      return (
-        <audio controls>
-          <source src={audioFile.url}  />
-          Your browser does not support the audio element.
-        </audio>
-      );
-    }
-    return null;
-  };
+      if (error) {
+        alert("error");
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [story_id]);
+
+  useEffect(() => {
+    console.log(story); // Log the updated result state
+  }, [story]);
+
+
+  // useEffect(() => {
+  //   const filteredStory = stories.find((s) => s["story_id"] === story_id);
+
+  //   setStory(filteredStory); // Update the story state with the filtered story
+  // }, [stories, story_id]);
+
+  // const renderAudioPlayer = () => {
+  //   const audioFile = story.files.find((file) => file.type === "audio");
+  //   if (audioFile) {
+  //     return (
+  //       <audio controls>
+  //         <source src={audioFile.url}  />
+  //         Your browser does not support the audio element.
+  //       </audio>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   return (
+
     <>
       {story && <h1>{story.title}</h1>}{" "}
       {story && (
@@ -52,7 +80,7 @@ export default function Story() {
             ))}
         </div>
       )}
-      {/* Render the story title if story is not null */}
+     Render the story title if story is not null 
     </>
   );
 }

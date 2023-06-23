@@ -7,6 +7,8 @@ export default function StoryCard({ storyTitle, storyId, key }) {
     event.preventDefault();
     navigate("/story", { state: storyId }); //key is the story_id - passed to story component
   }
+
+  
   console.log(storyId);
   return (
     <>
