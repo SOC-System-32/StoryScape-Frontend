@@ -3,7 +3,7 @@ import "./signUp.css";
 import NavBar from "../navBar/navBar";
 import { useNavigate } from "react-router-dom";
 
-export default function SignUp(props) {
+export default function SignUp(signIn, setSignIn) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,12 +18,12 @@ export default function SignUp(props) {
     //test@gmail.com
     //test123
     if(emailValue === "test@gmail.com" && passwordValue === "test123"){
-      navigate("/")
-
+      setSignIn(true);
+      navigate("/",{state: signIn})
   } else{
     alert("Email or password is incorrect")
   }
-  console.log(emailValue, passwordValue)
+
 }
   return (
     <>

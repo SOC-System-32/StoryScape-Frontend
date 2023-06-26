@@ -13,15 +13,16 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [fetchError, setFetchError] = useState(null);
   const [stories, setStories] = useState(null);
+  const [signIn, setSignIn] = useState(false);
   const navigate = useNavigate();
-
+  console.log(signIn);
   const [userData, setUserData] = useState([]); // State to store the fetched user data
   // console.log(supabase);
 
-  function handleUploadButton(event) {
-    event.preventDefault();
-    navigate("/uploadForm");
-  }
+  // function handleUploadButton(event) {
+  //   event.preventDefault();
+  //   navigate("/uploadForm");
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +42,17 @@ function App() {
     fetchData();
   }, []);
 
+  
+  function handleUploadButton(event) {
+    event.preventDefault();
+    if (signIn === true) {
+      navigate("/uploadForm");
+    } else {
+      navigate("/signUp" ,{state:{signIn: signIn}});
+    }
+  }
+
+  console.log(signIn);
   //FOR DARK MODE
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -76,7 +88,7 @@ function App() {
             <Row>
               <Col>
                 <section className="upload-form">
-                  <form onSubmit={handleUploadButton}>
+                  <form onSubmit={handleUploadButton} signIn={signIn} setSignIn={setSignIn}>
                     <button type="submit" className="upload-story-btn">
                       Upload a Story
                     </button>
